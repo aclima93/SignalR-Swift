@@ -25,12 +25,13 @@ public class HubProxy: HubProxyProtocol {
 
     // MARK: - Subscribe
 
+    @discardableResult
     public func on(eventName: String, handler: @escaping Subscription) -> Subscription? {
         guard !eventName.isEmpty else {
             NSException.raise(.invalidArgumentException, format: NSLocalizedString("Argument eventName is null", comment: "null event name exception"), arguments: getVaList(["nil"]))
             return nil
         }
-        
+
         return self.subscriptions[eventName] ?? self.subscriptions.updateValue(handler, forKey: eventName) ?? handler
     }
 
@@ -38,6 +39,11 @@ public class HubProxy: HubProxyProtocol {
         if let subscription = self.subscriptions[eventName] {
             subscription(args)
         }
+    }
+
+    @discardableResult
+    public func remove(eventName: String) -> Subscription? {
+        return self.subscriptions.removeValue(forKey: eventName)
     }
 
     // MARK: - Publish
