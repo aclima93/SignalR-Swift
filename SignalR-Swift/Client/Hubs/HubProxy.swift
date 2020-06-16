@@ -46,6 +46,10 @@ public class HubProxy: HubProxyProtocol {
         return self.subscriptions.removeValue(forKey: eventName)
     }
 
+    public func getSubscriptions() -> [String: Subscription] {
+        return self.subscriptions
+    }
+
     // MARK: - Publish
 
     public func invoke(method: String, withArgs args: [Any]) {
